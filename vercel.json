@@ -39,6 +39,9 @@
     },
     "api/save-pricing.js": {
       "maxDuration": 10
+    },
+    "api/get-pricing.js": {
+      "maxDuration": 10
     }
   }
 }

@@ -32,21 +32,23 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid pricing data' });
     }
 
-    // In Vercel, we can't write to filesystem directly
-    // So we'll need to use a database or external storage
-    // For now, return success and log (in production, use Vercel KV, MongoDB, etc.)
-    
-    console.log('Pricing update received:', Object.keys(pricing));
-    
-    // TODO: Save to Vercel KV or database for persistence
-    // Example with Vercel KV:
-    // const kv = new Redis(process.env.KV_REST_API_URL, process.env.KV_REST_API_TOKEN);
-    // await kv.set('pricing', JSON.stringify(pricing));
-
-    return res.status(200).json({ 
-      success: true,
-      message: 'Pricing saved (Note: Requires Vercel KV or database for persistence)' 
-    });
+    // Save to Vercel KV if available, otherwise use localStorage fallback (client-side)
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      // Vercel KV storage
+      const kv = await import('@vercel/kv');
+      await kv.default.set('pricing', pricing);
+      return res.status(200).json({ 
+        success: true,
+        message: 'Prijzen opgeslagen in Vercel KV' 
+      });
+    } else {
+      // Fallback: return success but note that it needs KV setup
+      console.log('Pricing update received (KV not configured):', Object.keys(pricing));
+      return res.status(200).json({ 
+        success: true,
+        message: 'Prijzen ontvangen. Configureer Vercel KV voor persistente opslag. Zie README voor instructies.' 
+      });
+    }
   } catch (error) {
     console.error('Save error:', error);
     return res.status(500).json({ error: 'Failed to save pricing' });

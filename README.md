@@ -74,16 +74,30 @@ Alle tarieven worden beheerd in `config/pricing.json`. Dit bestand kan eenvoudig
 ### Environment Variables
 Voeg in Vercel Dashboard → Settings → Environment Variables toe:
 - `ADMIN_PASSWORD`: Wachtwoord voor admin panel (bijv. `admin123`)
+- **Optioneel voor persistente opslag:**
+  - `KV_REST_API_URL`: Vercel KV REST API URL
+  - `KV_REST_API_TOKEN`: Vercel KV REST API Token
+
+### Vercel KV Setup (voor persistente opslag)
+1. Ga naar Vercel Dashboard → Storage → Create Database
+2. Kies "KV" (Key-Value store)
+3. Kopieer de `KV_REST_API_URL` en `KV_REST_API_TOKEN`
+4. Voeg deze toe als Environment Variables in je project
+5. Installeer de dependency: `npm install @vercel/kv` (of voeg toe aan package.json)
+
+Zonder Vercel KV worden prijsaanpassingen tijdelijk opgeslagen (alleen in de browser).
 
 ### Admin Panel
 - Toegang via: `/admin.html`
 - Login met het wachtwoord dat je hebt ingesteld in `ADMIN_PASSWORD`
-- Voor persistente opslag van prijsaanpassingen: configureer Vercel KV of een database
+- Met Vercel KV: prijsaanpassingen worden permanent opgeslagen
+- Zonder Vercel KV: prijsaanpassingen werken alleen in de huidige browser sessie
 
 ### Serverless Functions
 De admin functionaliteit gebruikt Vercel Serverless Functions:
 - `/api/admin` - Authenticatie endpoint
-- `/api/save-pricing` - Opslaan van prijzen (vereist database voor persistentie)
+- `/api/get-pricing` - Ophalen van prijzen (van KV of static file)
+- `/api/save-pricing` - Opslaan van prijzen (naar Vercel KV indien geconfigureerd)
 
 ## Licentie
 

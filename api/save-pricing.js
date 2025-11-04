@@ -32,21 +32,56 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid pricing data' });
     }
 
-    // Save to Vercel KV if available, otherwise use localStorage fallback (client-side)
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-      // Vercel KV storage
-      const kv = await import('@vercel/kv');
-      await kv.default.set('pricing', pricing);
-      return res.status(200).json({ 
-        success: true,
-        message: 'Prijzen opgeslagen in Vercel KV' 
-      });
+    // Save to Vercel Edge Config via REST API
+    // Edge Config updates require Vercel API token
+    if (process.env.EDGE_CONFIG && process.env.VERCEL_ACCESS_TOKEN) {
+      try {
+        // Extract Edge Config ID from connection string
+        // Format: https://edge-config.vercel.com/ecfg_xxx or ecfg_xxx@...
+        let configId = process.env.EDGE_CONFIG;
+        if (configId.includes('ecfg_')) {
+          configId = configId.split('ecfg_')[1].split('@')[0].split('/')[0];
+        }
+
+        const updateUrl = `https://api.vercel.com/v1/edge-config/${configId}/items`;
+        
+        const response = await fetch(updateUrl, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${process.env.VERCEL_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [{
+              operation: 'upsert',
+              key: 'pricing',
+              value: pricing
+            }]
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Edge Config update failed: ${errorText}`);
+        }
+        
+        return res.status(200).json({ 
+          success: true,
+          message: 'Prijzen opgeslagen in Edge Config' 
+        });
+      } catch (edgeError) {
+        console.error('Edge Config error:', edgeError);
+        return res.status(500).json({ 
+          success: false,
+          error: 'Failed to save to Edge Config: ' + edgeError.message 
+        });
+      }
     } else {
-      // Fallback: return success but note that it needs KV setup
-      console.log('Pricing update received (KV not configured):', Object.keys(pricing));
+      // Fallback: return success but note that it needs Edge Config setup
+      console.log('Pricing update received (Edge Config not configured):', Object.keys(pricing));
       return res.status(200).json({ 
         success: true,
-        message: 'Prijzen ontvangen. Configureer Vercel KV voor persistente opslag. Zie README voor instructies.' 
+        message: 'Prijzen ontvangen. Configureer Edge Config en VERCEL_ACCESS_TOKEN voor persistente opslag. Zie README voor instructies.' 
       });
     }
   } catch (error) {

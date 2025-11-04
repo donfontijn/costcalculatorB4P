@@ -3,7 +3,7 @@ let pricingConfig = null;
 
 async function loadPricingConfig() {
     try {
-        // Try to load from API first (if KV is configured), otherwise fallback to static file
+        // Try to load from API first (if Edge Config is configured), otherwise fallback to static file
         try {
             const apiResponse = await fetch('/api/get-pricing');
             if (apiResponse.ok) {

@@ -74,30 +74,37 @@ Alle tarieven worden beheerd in `config/pricing.json`. Dit bestand kan eenvoudig
 ### Environment Variables
 Voeg in Vercel Dashboard → Settings → Environment Variables toe:
 - `ADMIN_PASSWORD`: Wachtwoord voor admin panel (bijv. `admin123`)
-- **Optioneel voor persistente opslag:**
-  - `KV_REST_API_URL`: Vercel KV REST API URL
-  - `KV_REST_API_TOKEN`: Vercel KV REST API Token
+- **Voor persistente opslag:**
+  - `EDGE_CONFIG`: Edge Config connection string (wordt automatisch toegevoegd bij Edge Config setup)
+  - `VERCEL_ACCESS_TOKEN`: Vercel API token voor Edge Config updates (maak aan in [Account Settings → Tokens](https://vercel.com/account/tokens))
 
-### Vercel KV Setup (voor persistente opslag)
+### Vercel Edge Config Setup (aanbevolen voor persistente opslag)
 1. Ga naar Vercel Dashboard → Storage → Create Database
-2. Kies "KV" (Key-Value store)
-3. Kopieer de `KV_REST_API_URL` en `KV_REST_API_TOKEN`
-4. Voeg deze toe als Environment Variables in je project
-5. Installeer de dependency: `npm install @vercel/kv` (of voeg toe aan package.json)
+2. Kies **"Edge Config"** (ideaal voor configuratie data zoals prijzen)
+3. Na aanmaken wordt `EDGE_CONFIG` automatisch toegevoegd als environment variable
+4. Maak een Vercel API token aan: Account Settings → Tokens → Create Token
+5. Voeg `VERCEL_ACCESS_TOKEN` toe als environment variable met je token
+6. De dependency `@vercel/edge-config` is al in package.json
 
-Zonder Vercel KV worden prijsaanpassingen tijdelijk opgeslagen (alleen in de browser).
+**Waarom Edge Config?**
+- Ultra-fast reads (minder dan 1ms, 99% onder 10ms)
+- Globale replicatie naar alle edge locations
+- Perfect voor configuratie data die weinig verandert maar vaak wordt gelezen
+- Zie: [Vercel Storage Documentation](https://vercel.com/docs/storage)
+
+Zonder Edge Config worden prijsaanpassingen tijdelijk opgeslagen (alleen in de browser).
 
 ### Admin Panel
 - Toegang via: `/admin.html`
 - Login met het wachtwoord dat je hebt ingesteld in `ADMIN_PASSWORD`
-- Met Vercel KV: prijsaanpassingen worden permanent opgeslagen
-- Zonder Vercel KV: prijsaanpassingen werken alleen in de huidige browser sessie
+- Met Edge Config: prijsaanpassingen worden permanent en globaal opgeslagen
+- Zonder Edge Config: prijsaanpassingen werken alleen in de huidige browser sessie
 
 ### Serverless Functions
 De admin functionaliteit gebruikt Vercel Serverless Functions:
 - `/api/admin` - Authenticatie endpoint
-- `/api/get-pricing` - Ophalen van prijzen (van KV of static file)
-- `/api/save-pricing` - Opslaan van prijzen (naar Vercel KV indien geconfigureerd)
+- `/api/get-pricing` - Ophalen van prijzen (van Edge Config of static file)
+- `/api/save-pricing` - Opslaan van prijzen (naar Edge Config indien geconfigureerd)
 
 ## Licentie
 

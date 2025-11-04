@@ -4,7 +4,7 @@
   "description": "BIM 4 Portfolio Cost Calculator",
   "type": "module",
   "dependencies": {
-    "@vercel/kv": "^1.0.1"
+    "@vercel/edge-config": "^1.0.1"
   },
   "engines": {
     "node": ">=18.x"

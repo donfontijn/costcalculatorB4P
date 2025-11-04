@@ -16,24 +16,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Try to load from Vercel KV if available
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    // Try to load from Vercel Edge Config if available (better for config data)
+    if (process.env.EDGE_CONFIG) {
       try {
-        const kv = await import('@vercel/kv');
-        const pricing = await kv.default.get('pricing');
+        const { get } = await import('@vercel/edge-config');
+        const pricing = await get('pricing');
         
         if (pricing) {
           return res.status(200).json({ 
             pricing,
-            source: 'kv'
+            source: 'edge-config'
           });
         }
-      } catch (kvError) {
-        console.log('KV not available:', kvError);
+      } catch (edgeError) {
+        console.log('Edge Config not available:', edgeError);
       }
     }
 
-    // If no KV or no data in KV, return null to indicate static file should be used
+    // If no Edge Config or no data in Edge Config, return null to indicate static file should be used
     return res.status(200).json({ 
       pricing: null,
       source: 'static'

@@ -1,8 +1,9 @@
 // Admin Panel Logic
 
-const ADMIN_PASSWORD = 'admin123'; // TODO: Change this in production
+// Password is now checked server-side via API
 let pricingData = null;
 let originalPricingData = null;
+let authToken = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -24,16 +25,36 @@ function setupEventListeners() {
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
 }
 
-function handleLogin() {
+async function handleLogin() {
     const password = document.getElementById('admin-password').value;
     const errorMsg = document.getElementById('login-error');
     
-    if (password === ADMIN_PASSWORD) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'block';
-        loadPricingEditor();
-    } else {
+    try {
+        const response = await fetch('/api/admin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            authToken = data.token;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            errorMsg.style.display = 'none';
+            loadPricingEditor();
+        } else {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = data.error || 'Onjuist wachtwoord';
+            document.getElementById('admin-password').value = '';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
         errorMsg.style.display = 'block';
+        errorMsg.textContent = 'Fout bij inloggen. Probeer het opnieuw.';
         document.getElementById('admin-password').value = '';
     }
 }
@@ -148,19 +169,29 @@ function getCategoryFromContainer(containerId) {
 }
 
 async function handleSave() {
+    if (!authToken) {
+        alert('Niet ingelogd');
+        return;
+    }
+
     try {
-        // In a real application, this would be a POST request to a server
-        // For now, we'll show a message and update local storage as backup
-        localStorage.setItem('pricing_backup', JSON.stringify(pricingData));
-        
-        showSuccessMessage('Prijzen opgeslagen! (Let op: dit is lokaal. Voor productie is server-side opslag nodig.)');
-        
-        // TODO: Implement actual server-side save
-        // const response = await fetch('/api/pricing', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(pricingData)
-        // });
+        const response = await fetch('/api/save-pricing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({ pricing: pricingData })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('pricing_backup', JSON.stringify(pricingData));
+            showSuccessMessage(data.message || 'Prijzen opgeslagen!');
+        } else {
+            throw new Error(data.error || 'Fout bij opslaan');
+        }
     } catch (error) {
         console.error('Save failed:', error);
         alert('Fout bij opslaan: ' + error.message);

@@ -69,6 +69,22 @@ Alle tarieven worden beheerd in `config/pricing.json`. Dit bestand kan eenvoudig
 - De calculator geeft een indicatie; detailquotes worden later gemaakt met uren × uurtarieven
 - Voor "Model only" wordt de scanning tijd selector automatisch verborgen
 
+## Deployment op Vercel
+
+### Environment Variables
+Voeg in Vercel Dashboard → Settings → Environment Variables toe:
+- `ADMIN_PASSWORD`: Wachtwoord voor admin panel (bijv. `admin123`)
+
+### Admin Panel
+- Toegang via: `/admin.html`
+- Login met het wachtwoord dat je hebt ingesteld in `ADMIN_PASSWORD`
+- Voor persistente opslag van prijsaanpassingen: configureer Vercel KV of een database
+
+### Serverless Functions
+De admin functionaliteit gebruikt Vercel Serverless Functions:
+- `/api/admin` - Authenticatie endpoint
+- `/api/save-pricing` - Opslaan van prijzen (vereist database voor persistentie)
+
 ## Licentie
 
 Interne tool voor BIM 4 Portfolio projecten.

@@ -7,11 +7,29 @@ let authToken = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('Loading pricing config...');
         pricingData = await loadPricingConfig();
+        console.log('Pricing data loaded:', pricingData ? 'SUCCESS' : 'FAILED');
+        
+        if (!pricingData) {
+            throw new Error('Pricing data is null');
+        }
+        
         originalPricingData = JSON.parse(JSON.stringify(pricingData));
         setupEventListeners();
+        console.log('Admin panel initialized');
     } catch (error) {
         console.error('Failed to load pricing config:', error);
+        const loginScreen = document.getElementById('login-screen');
+        if (loginScreen) {
+            loginScreen.innerHTML = `
+                <div class="login-box">
+                    <h2>Fout bij laden</h2>
+                    <p style="color: var(--accent-warning);">Kon prijzen data niet laden: ${error.message}</p>
+                    <button onclick="location.reload()" class="admin-btn primary">Herlaad pagina</button>
+                </div>
+            `;
+        }
     }
 });
 
@@ -42,6 +60,22 @@ async function handleLogin() {
         
         if (data.success) {
             authToken = data.token;
+            console.log('Login successful, loading editor...');
+            
+            // Ensure pricing data is loaded before showing editor
+            if (!pricingData) {
+                console.log('Pricing data not loaded yet, loading now...');
+                try {
+                    pricingData = await loadPricingConfig();
+                    originalPricingData = JSON.parse(JSON.stringify(pricingData));
+                } catch (loadError) {
+                    console.error('Failed to load pricing after login:', loadError);
+                    errorMsg.style.display = 'block';
+                    errorMsg.textContent = 'Fout bij laden van prijzen: ' + loadError.message;
+                    return;
+                }
+            }
+            
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
             errorMsg.style.display = 'none';
@@ -67,14 +101,43 @@ function handleLogout() {
 }
 
 function loadPricingEditor() {
-    // Load Scan-to-BIM prices
-    loadPriceSection('scan-to-bim-prices', pricingData.scanToBIM);
-    
-    // Load Scan Only prices (nested structure)
-    loadNestedPriceSection('scan-only-prices', pricingData.scanOnly);
-    
-    // Load Model Only prices
-    loadPriceSection('model-only-prices', pricingData.modelOnly);
+    if (!pricingData) {
+        console.error('Pricing data not loaded');
+        const adminContent = document.querySelector('.admin-content');
+        if (adminContent) {
+            adminContent.innerHTML = '<p style="color: var(--accent-warning);">Fout: Prijzen data niet geladen. Herlaad de pagina.</p>';
+        }
+        return;
+    }
+
+    try {
+        // Load Scan-to-BIM prices
+        if (pricingData.scanToBIM) {
+            loadPriceSection('scan-to-bim-prices', pricingData.scanToBIM);
+        } else {
+            document.getElementById('scan-to-bim-prices').innerHTML = '<p>Geen data beschikbaar</p>';
+        }
+        
+        // Load Scan Only prices (nested structure)
+        if (pricingData.scanOnly) {
+            loadNestedPriceSection('scan-only-prices', pricingData.scanOnly);
+        } else {
+            document.getElementById('scan-only-prices').innerHTML = '<p>Geen data beschikbaar</p>';
+        }
+        
+        // Load Model Only prices
+        if (pricingData.modelOnly) {
+            loadPriceSection('model-only-prices', pricingData.modelOnly);
+        } else {
+            document.getElementById('model-only-prices').innerHTML = '<p>Geen data beschikbaar</p>';
+        }
+    } catch (error) {
+        console.error('Error loading pricing editor:', error);
+        const adminContent = document.querySelector('.admin-content');
+        if (adminContent) {
+            adminContent.innerHTML = `<p style="color: var(--accent-warning);">Fout bij laden: ${error.message}</p>`;
+        }
+    }
 }
 
 function loadPriceSection(containerId, prices) {

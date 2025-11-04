@@ -1,0 +1,525 @@
+/* BIM 4 Portfolio Cost Calculator - Schiphol App Style */
+
+@font-face {
+    font-family: 'RSG Variable';
+    src: url('../fonts/rsgvariable-roman.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'RSG Variable';
+    src: url('../fonts/rsgvariable-italic.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    --bg-primary: #2D3236;
+    --bg-secondary: #3A4044;
+    --bg-tertiary: #454B50;
+    --text-primary: #FFFFFF;
+    --text-secondary: #E0E0E0;
+    --text-muted: #B0B0B0;
+    --accent-primary: #FF9900;
+    --accent-secondary: #FDD835;
+    --accent-success: #4CAF50;
+    --accent-warning: #FF9900;
+    --border-color: #454B50;
+    --input-bg: #3A4044;
+    --input-border: #50565A;
+    --input-focus: #FF9900;
+    --card-bg: #3A4044;
+    --shadow: rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'RSG Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.allinq-logo-header {
+    height: 36px;
+    width: auto;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.footer-logos {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+}
+
+.schiphol-logo {
+    height: 50px;
+    width: auto;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.logo-section h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Calculator Wrapper */
+main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator-wrapper {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Input Panel (Left Sidebar) */
+.input-panel {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.input-panel h2 {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.input-group input:hover,
+.input-group select:hover {
+    border-color: var(--text-muted);
+}
+
+.input-hint {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
+/* Advice Section */
+.advice-section {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.advice-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.info-icon {
+    color: var(--text-muted);
+    cursor: help;
+    font-size: 0.9rem;
+}
+
+.advice-content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.advice-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem;
+    margin-bottom: 0.6rem;
+    border-radius: 6px;
+    background: var(--bg-tertiary);
+    border-left: 3px solid;
+    animation: fadeIn 0.3s ease;
+}
+
+.advice-item p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.advice-warning {
+    border-left-color: var(--accent-warning);
+    background: rgba(255, 153, 0, 0.1);
+}
+
+.advice-success {
+    border-left-color: var(--accent-success);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.advice-info {
+    border-left-color: var(--accent-secondary);
+    background: rgba(253, 216, 53, 0.1);
+}
+
+.advice-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.advice-placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Results Panel (Right Section) */
+.results-panel {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.results-header {
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.results-header h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.export-btn {
+    padding: 0.6rem 1.25rem;
+    background: var(--accent-primary);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.export-btn:hover {
+    background: #FFB84D;
+    transform: translateY(-1px);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
+.results-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Result Cards */
+.calculation-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.result-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.result-card.highlight {
+    background: rgba(255, 153, 0, 0.1);
+    border-color: var(--accent-primary);
+}
+
+.result-label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+}
+
+.result-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.result-value.large {
+    font-size: 2.5rem;
+    color: var(--accent-secondary);
+    font-weight: 700;
+}
+
+/* Breakdown Section */
+.breakdown-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+}
+
+.breakdown-section h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+}
+
+.breakdown-item.highlight {
+    background: rgba(255, 153, 0, 0.1);
+    border-left: 3px solid var(--accent-primary);
+    padding-left: 0.9rem;
+}
+
+.breakdown-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.breakdown-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.placeholder-text {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Disclaimer */
+.disclaimer {
+    background: rgba(255, 153, 0, 0.05);
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    flex-shrink: 0;
+}
+
+.disclaimer p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.disclaimer strong {
+    color: var(--accent-warning);
+}
+
+.error {
+    color: var(--accent-warning);
+    padding: 0.75rem 1rem;
+    background: rgba(255, 153, 0, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent-warning);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .calculator-wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .input-panel {
+        order: 2;
+        max-height: 40vh;
+    }
+
+    .results-panel {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0.75rem 1rem;
+        height: calc(100vh - 1.5rem);
+    }
+
+    .logo-section h1 {
+        font-size: 1.5rem;
+    }
+
+    .calculator-wrapper {
+        gap: 1rem;
+    }
+
+    .input-panel,
+    .results-panel {
+        padding: 1rem;
+    }
+
+    .result-value.large {
+        font-size: 2rem;
+    }
+}
+
+/* Scrollbar Styling */
+.advice-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.advice-content::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.advice-content::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+}
+
+.advice-content::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIM Costcalculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <div class="title-container">
+                    <img src="assets/allinq-logo.svg" alt="Allinq" class="allinq-logo-header">
+                    <h1>BIM Costcalculator</h1>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="calculator-wrapper">
+                <!-- Left Sidebar - Inputs -->
+                <aside class="input-panel">
+                    <h2>Projectparameters</h2>
+                    
+                    <div class="input-group">
+                        <label for="surface-area">Oppervlakte (m²)</label>
+                        <input type="number" id="surface-area" min="0" step="0.01" placeholder="Bijv. 5000">
+                        <span class="input-hint">Voer het oppervlakte in vierkante meters in</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="service-type">Servicetype</label>
+                        <select id="service-type">
+                            <option value="scan-to-bim">Scan-to-BIM</option>
+                            <option value="scan-only">Scan only</option>
+                            <option value="model-only">Model only</option>
+                        </select>
+                        <span class="input-hint">Kies het type service dat nodig is</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="room-type">Ruimtetypologie</label>
+                        <select id="room-type">
+                            <option value="alles-in-zicht">Ruimtes alles in zicht</option>
+                            <option value="plafonds-zonder-openen">Ruimtes met plafonds (zonder te openen)</option>
+                            <option value="plafonds-lamellen">Ruimtes met plafonds (lamellen/doorzichtbaar)</option>
+                            <option value="plafonds-te-openen">Ruimtes met plafonds (te openen)</option>
+                            <option value="technisch">Technische ruimtes</option>
+                            <option value="dak-buiten">Dak/buiten</option>
+                            <option value="lift-in-zicht">Lift - in zicht</option>
+                            <option value="lift-compleet">Lift - compleet</option>
+                        </select>
+                        <span class="input-hint">Selecteer het type ruimte</span>
+                    </div>
+
+                    <div class="input-group" id="scanning-time-group">
+                        <label for="scanning-time">Scanning tijd</label>
+                        <select id="scanning-time">
+                            <option value="overdag">Overdag</option>
+                            <option value="nachtwerk">Nachtwerk</option>
+                        </select>
+                        <span class="input-hint">Wanneer kan er gescand worden?</span>
+                    </div>
+
+                    <!-- Advice Section -->
+                    <div class="advice-section">
+                        <h3>
+                            <span>Ons Advies</span>
+                            <span class="info-icon" title="Advies wordt gegenereerd op basis van uw keuzes">ℹ️</span>
+                        </h3>
+                        <div class="advice-content" id="advice-content">
+                            <p class="advice-placeholder">Vul de projectparameters in om advies te ontvangen</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Section - Results -->
+                <section class="results-panel">
+                    <div class="results-header">
+                        <div>
+                            <h2>Kostenschatting</h2>
+                            <p class="results-subtitle">Indicatieve prijs op basis van uitvoeringskosten</p>
+                        </div>
+                        <button id="export-btn" class="export-btn" style="display: none;">
+                            <span>📥</span> Exporteren
+                        </button>
+                    </div>
+
+                    <div class="calculation-results" id="calculation-results">
+                        <div class="result-card">
+                            <div class="result-label">Prijs per m²</div>
+                            <div class="result-value" id="price-per-m2">€0.00</div>
+                        </div>
+
+                        <div class="result-card highlight">
+                            <div class="result-label">Totaal Project</div>
+                            <div class="result-value large" id="total-price">€0.00</div>
+                        </div>
+
+                        <div class="breakdown-section">
+                            <h3>Kostenopbouw</h3>
+                            <div class="breakdown-list" id="breakdown-list">
+                                <p class="placeholder-text">Vul de projectparameters in om de berekening te zien</p>
+                            </div>
+                        </div>
+
+                        <div class="disclaimer">
+                            <p><strong>Let op:</strong> Dit is een indicatieve schatting op basis van uitvoeringskosten. Voor een gedetailleerde offerte wordt een volledige calculatie gemaakt met uren × uurtarieven.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer class="footer-logos">
+            <img src="assets/schiphol_logo.png" alt="Schiphol" class="schiphol-logo" id="schiphol-logo">
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/calculator.js"></script>
+    <script>
+        // Debug: Check if scripts loaded
+        console.log('Scripts loaded');
+        console.log('loadPricingConfig available:', typeof loadPricingConfig !== 'undefined');
+    </script>
+</body>
+</html>
+

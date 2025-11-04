@@ -1,0 +1,72 @@
+{
+  "scanToBIM": {
+    "alles-in-zicht": 36.97,
+    "plafonds-zonder-openen": 29.62,
+    "plafonds-lamellen": 52.52,
+    "plafonds-te-openen": 74.55,
+    "technisch": 78.41,
+    "dak-buiten": 6.29,
+    "lift-in-zicht": 34.10,
+    "lift-compleet": 90.50
+  },
+  "scanOnly": {
+    "alles-in-zicht": {
+      "overdag": 3.73,
+      "nachtwerk": 0
+    },
+    "plafonds-zonder-openen": {
+      "overdag": 2.49,
+      "nachtwerk": 5.00
+    },
+    "plafonds-lamellen": {
+      "overdag": 3.86,
+      "nachtwerk": 0
+    },
+    "plafonds-te-openen": {
+      "overdag": 13.51,
+      "nachtwerk": 8.50
+    },
+    "technisch": {
+      "overdag": 7.56,
+      "nachtwerk": 0
+    },
+    "dak-buiten": {
+      "overdag": 1.80,
+      "nachtwerk": 0
+    },
+    "lift-in-zicht": {
+      "overdag": 1.19,
+      "nachtwerk": 0
+    },
+    "lift-compleet": {
+      "overdag": 50.20,
+      "nachtwerk": 0
+    }
+  },
+  "modelOnly": {
+    "alles-in-zicht": 40.14,
+    "plafonds-zonder-openen": 33.10,
+    "plafonds-lamellen": 46.50,
+    "plafonds-te-openen": 52.65,
+    "technisch": 70.00,
+    "dak-buiten": 5.36,
+    "lift-in-zicht": 32.91,
+    "lift-compleet": 40.31
+  },
+  "roomTypeLabels": {
+    "alles-in-zicht": "Ruimtes alles in zicht",
+    "plafonds-zonder-openen": "Ruimtes met plafonds (zonder te openen)",
+    "plafonds-lamellen": "Ruimtes met plafonds (lamellen/doorzichtbaar)",
+    "plafonds-te-openen": "Ruimtes met plafonds (te openen)",
+    "technisch": "Technische ruimtes",
+    "dak-buiten": "Dak/buiten",
+    "lift-in-zicht": "Lift - in zicht",
+    "lift-compleet": "Lift - compleet"
+  },
+  "serviceTypeLabels": {
+    "scan-to-bim": "Scan-to-BIM",
+    "scan-only": "Scan only",
+    "model-only": "Model only"
+  }
+}
+

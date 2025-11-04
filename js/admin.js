@@ -54,7 +54,7 @@ async function handleLogin() {
     } catch (error) {
         console.error('Login error:', error);
         errorMsg.style.display = 'block';
-        errorMsg.textContent = 'Fout bij inloggen. Probeer het opnieuw.';
+        errorMsg.textContent = 'Fout bij inloggen: ' + (error.message || 'Probeer het opnieuw.');
         document.getElementById('admin-password').value = '';
     }
 }

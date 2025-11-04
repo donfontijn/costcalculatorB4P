@@ -16,8 +16,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { password } = JSON.parse(req.body);
+    // Handle both parsed and string body formats (Vercel can do either)
+    let body;
+    if (typeof req.body === 'string') {
+      body = JSON.parse(req.body);
+    } else {
+      body = req.body || {};
+    }
+    
+    const { password } = body;
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+    // Debug logging (remove in production)
+    console.log('Login attempt - password provided:', !!password);
+    console.log('Admin password set:', !!adminPassword);
+
+    if (!password) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Password is required' 
+      });
+    }
 
     if (password === adminPassword) {
       // Generate a simple token (in production, use JWT)
@@ -34,7 +53,11 @@ export default async function handler(req, res) {
       });
     }
   } catch (error) {
-    return res.status(400).json({ error: 'Invalid request' });
+    console.error('Login error:', error);
+    return res.status(400).json({ 
+      success: false,
+      error: 'Invalid request: ' + error.message 
+    });
   }
 }
 

@@ -27,9 +27,10 @@ export default async function handler(req, res) {
     const { password } = body;
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
-    // Debug logging (remove in production)
+    // Debug logging
     console.log('Login attempt - password provided:', !!password);
-    console.log('Admin password set:', !!adminPassword);
+    console.log('Admin password from env:', process.env.ADMIN_PASSWORD ? 'SET' : 'NOT SET');
+    console.log('Using password:', adminPassword === 'admin123' ? 'DEFAULT (admin123)' : 'CUSTOM');
 
     if (!password) {
       return res.status(400).json({ 

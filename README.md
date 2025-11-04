@@ -74,6 +74,11 @@ Alle tarieven worden beheerd in `config/pricing.json`. Dit bestand kan eenvoudig
 ### Environment Variables
 Voeg in Vercel Dashboard → Settings → Environment Variables toe:
 - `ADMIN_PASSWORD`: Wachtwoord voor admin panel (bijv. `admin123`)
+
+**BELANGRIJK:** 
+- Zorg dat je de environment variable toevoegt voor **alle environments** (Production, Preview, Development)
+- Of selecteer minstens "Production" als je alleen in productie gebruikt
+- Na het toevoegen/wijzigen van environment variables: **Redeploy** je project (Vercel gebruikt environment variables alleen bij deployment)
 - **Voor persistente opslag:**
   - `EDGE_CONFIG`: Edge Config connection string (wordt automatisch toegevoegd bij Edge Config setup)
   - `VERCEL_ACCESS_TOKEN`: Vercel API token voor Edge Config updates (maak aan in [Account Settings → Tokens](https://vercel.com/account/tokens))
